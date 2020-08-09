@@ -13,19 +13,24 @@ def __constant(dices, eval_fn, const_score_val):
 
 ################################################################
 
-class BaseScoringModule:
+from abc import ABCMeta, abstractmethod
+
+class BaseScoringModule(metaclass=ABCMeta):
+    @abstractmethod
     def __init__(self, score):
-        self.score = score
+        pass
 
+    @abstractmethod
     def evaluate(self, dices):
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def getScore(self):
-        raise NotImplementedError
+        pass
 
 class ConstantScoringModule(BaseScoringModule):
     def __init__(self, score):
-        BaseScoringModule.__init__(self, score)
+        self.score = score
 
     def evaluate(self, dices):
         return True
@@ -35,7 +40,7 @@ class ConstantScoringModule(BaseScoringModule):
 
 class NonConstantScoringModule(BaseScoringModule):
     def __init__(self, score):
-        BaseScoringModule.__init__(self, score)
+        self.score = score
     
     def evaluate(self, dices):
         return True
