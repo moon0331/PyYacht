@@ -28,22 +28,38 @@ class BaseScoringModule(metaclass=ABCMeta):
     def getScore(self):
         pass
 
+# Full House, Small Straight, Big Straight, The Yacht, (Bonus)
 class ConstantScoringModule(BaseScoringModule):
-    def __init__(self, score):
+    constantName = ['Full House', 'Small Straight', 'Big Straight', 'The Yacht'] #dict로 수정
+    def __init__(self, name, score):
+        self.name = name
         self.score = score
 
     def evaluate(self, dices):
         return True
 
-    def score(self):
-        return self.score
+    def score(self, dices):
+        if self.evaluate(dices):
+            return self.score
+        else:
+            return 0
 
+#1s, 2s, 3s, 4s, 5s, 6s, 3 of a kind, 4 of a kind, Chance
 class NonConstantScoringModule(BaseScoringModule):
-    def __init__(self, score):
+    nonConstantName = ['1s', '2s', '3s', '4s', '5s', '6s',
+                       '3 of a Kind', '4 of a Kind', 'Chance'] #dict
+    def __init__(self, name, score):
+        self.name = name
         self.score = score
     
     def evaluate(self, dices):
         return True
+
+    def calScore(self, dices):
+        return 0
     
-    def score(self):
-        return self.score
+    def score(self, dices):
+        if self.evaluate(dices):
+            return self.calScore(dices)
+        else:
+            return 0
