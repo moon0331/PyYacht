@@ -1,9 +1,9 @@
 from board import Board
-from dice import SixDices
+from dice import FiveDices
 
 class Player:
     board = Board() # 공유
-    dices = SixDices() # 공유
+    dices = FiveDices() # 공유
     
     def __init__(self, _id):
         self.id = _id
@@ -15,3 +15,4 @@ class Player:
     def getScore(self, input_board):
         # 입력하고
         # 점수 받고
+        pass

@@ -4,10 +4,18 @@ from random import randint
 from recordtype import recordtype
 
 Dice = recordtype('Dice', 'number value is_fixed roll')
+# 이전값 저장해야 함 (익명함수로 불가능) -> 클래스로?
 
-class SixDices:
+def roll(dice):
+    if dice.is_fixed:
+        return str(dice.value)+'f'
+    else:
+        dice.value = randint(1,6)
+        return dice.value
+
+class FiveDices:
     def __init__(self):
-        self.dices = [Dice(i, 0, False, lambda fixed : randint(1,6) if fixed else 0) for i in range(5)]
+        self.dices = [Dice(i, 0, False, roll) for i in range(5)]
 
     def __repr__(self):
         repr_string = ''
@@ -20,7 +28,7 @@ class SixDices:
             dice.is_fixed = False
 
     def roll(self):
-        return [dice.roll(dice.is_fixed) for dice in self.dices]
+        return [dice.value for dice in filter(roll, self.dices)]
 
     def fix_value(self, fix_index):
         # ex) fix_index is '1 3 4'
@@ -28,7 +36,15 @@ class SixDices:
             self.dices[int(idx)].is_fixed = True
 
 if __name__ == '__main__':
-    dices = SixDices()
-    print(dices)
+    dices = FiveDices()
+    #print(dices)
+    dices.before_first_roll()
+    print('='*100)
     print(dices.roll())
-    print(dices.fix_value('1 3 4'))
+    print(dices)
+    dices.fix_value('1 3 4')
+    print(dices.roll())
+    print(dices)
+    dices.fix_value('2')
+    print(dices.roll())
+    print(dices)

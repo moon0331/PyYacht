@@ -14,6 +14,7 @@ def __constant(dices, eval_fn, const_score_val):
 ################################################################
 
 from abc import ABCMeta, abstractmethod
+from collections import Counter
 
 class BaseScoringModule(metaclass=ABCMeta):
     @abstractmethod
