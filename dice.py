@@ -20,7 +20,7 @@ class FiveDices:
     def __repr__(self):
         repr_string = ''
         for dice in self.dices:
-            repr_string += str(dice)
+            repr_string += '[value = {}, fixed = {}]'.format(dice.value, ' True' if dice.is_fixed else 'False')
         return repr_string
 
     def before_first_roll(self):
@@ -28,23 +28,29 @@ class FiveDices:
             dice.is_fixed = False
 
     def roll(self):
-        return [dice.value for dice in filter(roll, self.dices)]
+        return list(val.value for val in filter(roll, self.dices)) # 이중 접근?
 
-    def fix_value(self, fix_index):
+    def fix_value(self, fix_index): # 최적화 필요
         # ex) fix_index is '1 3 4'
+        for dice in self.dices:
+            dice.is_fixed = False
         for idx in fix_index.split():
             self.dices[int(idx)].is_fixed = True
 
+    def getValue(self):
+        return list(dice.value for dice in self.dices)
+
 if __name__ == '__main__':
     dices = FiveDices()
-    #print(dices)
+    print(dices)
     dices.before_first_roll()
     print('='*100)
-    print(dices.roll())
+    dices.roll()
     print(dices)
     dices.fix_value('1 3 4')
-    print(dices.roll())
+    dices.roll()
     print(dices)
     dices.fix_value('2')
-    print(dices.roll())
+    dices.roll()
     print(dices)
+    print(dices.getValue())

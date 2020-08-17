@@ -1,28 +1,14 @@
-def __sum(dices): # 3 of a kind, 4 of a kind, Chance
-    return sum(dices)
-
-def __sum_of_number(dices, i): #1s, 2s, 3s, 4s, 5s, 6s
-    return sum(x for x in dices if x == i)
-
-# Full House, Small Straight, Big Straight, The Yacht, (Bonus)
-def __constant(dices, eval_fn, const_score_val): 
-    if eval_fn(dices):
-        return const_score_val
-    else:
-        return 0
-
-################################################################
-
 from abc import ABCMeta, abstractmethod
 from collections import Counter
 
 class BaseScoringModule(metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, score):
+    def __init__(self, name):
         pass
 
     @abstractmethod
-    def evaluate(self, dices):
+    def evaluate(self, dice_value):
+        #dices assume Six
         pass
 
     @abstractmethod
@@ -36,10 +22,10 @@ class ConstantScoringModule(BaseScoringModule):
         self.name = name
         self.score = score
 
-    def evaluate(self, dices):
-        return True
+    def evaluate(self, dice_value):
+        counter = Counter(dices)
 
-    def score(self, dices):
+    def getScore(self, dice_value):
         if self.evaluate(dices):
             return self.score
         else:
@@ -49,18 +35,18 @@ class ConstantScoringModule(BaseScoringModule):
 class NonConstantScoringModule(BaseScoringModule):
     nonConstantName = ['1s', '2s', '3s', '4s', '5s', '6s',
                        '3 of a Kind', '4 of a Kind', 'Chance'] #dict
-    def __init__(self, name, score):
+    def __init__(self, name, policy):
         self.name = name
-        self.score = score
+        self.policy = policy # (all_sum, exact_sum)
     
-    def evaluate(self, dices):
+    def evaluate(self, dice_value):
         return True
 
-    def calScore(self, dices):
+    def calScore(self, dice_value):
         return 0
     
-    def score(self, dices):
-        if self.evaluate(dices):
+    def getScore(self, dice_value):
+        if self.evaluate(dice_value):
             return self.calScore(dices)
         else:
             return 0
